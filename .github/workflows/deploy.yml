@@ -1,0 +1,20 @@
+ 
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install and build
+        run: |
+          pnpm i --prod
+          pnpm build -- --base /${{ github.event.repository.name }}/
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_DEPLOYMENT_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: client-app/dist
